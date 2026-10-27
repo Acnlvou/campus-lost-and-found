@@ -1,6 +1,6 @@
 # 校园失物招领系统
 
-本仓库为校园失物招领系统的空白项目骨架，依据课程作业交付要求整理过程文档目录，并参考 AgriNet 项目的 backend、deploy、desktop、docs、scripts 分层。当前只放置目录说明 Markdown，不包含应用代码或其他实现文件。
+本仓库为校园失物招领系统的空白项目骨架，依据课程作业交付要求整理过程文档目录，并进行 backend、deploy、desktop、docs、scripts 分层。当前只放置目录说明 Markdown，不包含应用代码或其他实现文件。
 
 ## 当前需求范围
 
