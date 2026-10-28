@@ -1,0 +1,18 @@
+[project]
+name = "campus-lost-and-found-api"
+version = "0.1.0"
+description = "FastAPI backend for the campus lost and found system"
+requires-python = ">=3.11"
+dependencies = [
+    "alembic>=1.14,<2",
+    "fastapi[standard]>=0.115,<1",
+    "pydantic-settings>=2.0,<3",
+    "python-dotenv>=1.0,<2",
+    "sqlalchemy>=2.0,<3",
+]
+
+[tool.fastapi]
+entrypoint = "app.main:app"
+
+[tool.uv]
+package = false
