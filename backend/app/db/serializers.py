@@ -15,6 +15,7 @@ def item_dict(item, owner_name=None) -> dict:
         "status": item.status,
         "pub_status": item.pub_status,
         "created_at": item.created_at,
+        "review_reason": item.review_reason,
     }
     if owner_name is not None:
         data["owner_name"] = owner_name

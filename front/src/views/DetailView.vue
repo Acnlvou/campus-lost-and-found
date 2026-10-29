@@ -11,6 +11,11 @@
         </div>
         <h1>{{ detail.item.title }}</h1>
 
+        <!-- 新增：拒绝理由展示 -->
+        <div v-if="detail.item.pub_status === 'REJECTED' && detail.item.review_reason" style="color: #f56c6c; background: #fef0f0; padding:10px 14px; border-radius:6px; margin:12px 0;">
+          <strong>拒绝理由：</strong>{{ detail.item.review_reason }}
+        </div>
+
         <dl class="facts">
           <div><dt>物品类别</dt><dd>{{ detail.item.category }}</dd></div>
           <div><dt>地点</dt><dd>{{ detail.item.location }}</dd></div>
@@ -99,6 +104,11 @@ const claimLoading = ref(false)
 async function load() {
   const { data } = await http.get<DetailData>(`/items/${route.params.id}`)
   detail.value = data
+
+  // 读取query参数，刚发布成功弹窗提示
+  if (route.query.notice === 'pending') {
+    ElMessage.success('提交成功！信息正在等待管理员审核')
+  }
 }
 
 async function submitClaim() {

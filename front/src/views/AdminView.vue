@@ -44,13 +44,30 @@ async function load() {
 }
 
 async function review(itemId: number, decision: string) {
-  const message = decision === 'approve' ? '确认通过该信息并公开？' : '确认拒绝该信息？'
-  try {
-    await ElMessageBox.confirm(message, '审核', { type: 'warning' })
-  } catch (e) {
-    return
+  let review_reason: string | undefined = undefined
+
+  if (decision === 'approve') {
+    try {
+      await ElMessageBox.confirm('确认通过该信息并公开？', '审核', { type: 'warning' })
+    } catch (e) {
+      return
+    }
+  } else {
+    // 拒绝：弹出输入框填写理由
+    try {
+      review_reason = await ElMessageBox.prompt('请输入拒绝理由', '拒绝审核', {
+        type: 'warning',
+        inputPlaceholder: '例如：信息描述模糊、无关内容等',
+      })
+    } catch (e) {
+      return
+    }
   }
-  await http.post(`/items/${itemId}/review`, { decision })
+
+  await http.post(`/items/${itemId}/review`, {
+    decision,
+    review_reason
+  })
   ElMessage.success('审核已保存')
   await load()
 }
