@@ -61,7 +61,7 @@ def create_app():
             if not hmac.compare_digest(supplied, request.session["csrf"]):
                 return JSONResponse({"error": "页面验证失效，请刷新后重试。"}, status_code=400)
         response = await call_next(request)
-        response.headers["X-CSRF-Token"] = request.session["csrf"]
+        response.headers["X-CSRF-Token"] = request.session.get("csrf", "")
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Content-Security-Policy"] = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; connect-src 'self'"
