@@ -18,6 +18,7 @@ export interface Item {
   pub_status: string
   created_at: string
   owner_name?: string
+  review_reason?: string
 }
 
 export interface Claim {

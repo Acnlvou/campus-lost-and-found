@@ -2,8 +2,8 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-VERSION = "v1.0-rc"
-ALLOW_SELF_CLAIM = True
+VERSION = "v1.1-rc"
+ALLOW_SELF_CLAIM = False
 CATEGORIES = ("数码设备", "证件卡片", "学习用品", "生活用品", "其他")
 LABELS = {
     "OPEN": "待认领",

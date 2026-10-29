@@ -36,6 +36,7 @@ class Item(Base):
     status: Mapped[str] = mapped_column(String(10), nullable=False, default="OPEN")
     pub_status: Mapped[str] = mapped_column(String(10), nullable=False, default="PENDING")
     created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    review_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class Claim(Base):

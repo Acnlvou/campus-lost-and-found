@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from ...core.errors import BusinessError
@@ -9,6 +10,11 @@ from ..deps import current_user, get_db, login_required
 from ..schemas import PublishRequest
 
 router = APIRouter()
+
+# 审核请求体模型
+class ItemReviewBody(BaseModel):
+    decision: str
+    review_reason: str | None = None
 
 
 @router.get("/items")
@@ -28,7 +34,36 @@ def list_items(
 @router.post("/items", status_code=201)
 def publish(body: PublishRequest, user=Depends(login_required), db: Session = Depends(get_db)):
     item_id = publish_item(db, user.id, body.kind, body.title, body.category, body.location, body.event_time, body.description)
-    return {"id": item_id, "redirect": f"/items/{item_id}"}
+    # ✅ 修改这里，追加 notice=pending 参数
+    return {"id": item_id, "redirect": f"/items/{item_id}?notice=pending"}
+
+
+@router.post("/items/{item_id}/review")
+def review_item(
+    item_id: int,
+    body: ItemReviewBody,
+    user=Depends(login_required),
+    db: Session = Depends(get_db)
+):
+    # 只有管理员才能审核
+    if user.role != "admin":
+        raise BusinessError("无审核权限", 403)
+
+    item = db.query(Item).filter(Item.id == item_id).first()
+    if item is None:
+        raise BusinessError("物品不存在", 404)
+
+    if body.decision == "approve":
+        item.pub_status = "APPROVED"
+        item.review_reason = None
+    elif body.decision == "reject":
+        item.pub_status = "REJECTED"
+        item.review_reason = body.review_reason
+    else:
+        raise BusinessError("decision只能是 approve / reject", 400)
+
+    db.commit()
+    return {"ok": True}
 
 
 @router.get("/items/{item_id}")
