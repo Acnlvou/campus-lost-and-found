@@ -15,5 +15,11 @@ dependencies = [
 [tool.fastapi]
 entrypoint = "app.main:app"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+norecursedirs = [".venv", "data", "alembic"]
+
 [tool.uv]
 package = false
